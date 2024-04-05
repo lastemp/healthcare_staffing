@@ -1,6 +1,6 @@
 # healthcare_staffing
 
-This is a healthcare_staffing program developed as a Rust Smart Contract(running on Solana Blockchain .
+This is a healthcare staffing program developed as a Rust Smart Contract(running on Solana Blockchain).
 
 Below are some basic features contained in the program:
 
