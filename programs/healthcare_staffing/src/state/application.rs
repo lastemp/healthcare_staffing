@@ -17,17 +17,22 @@ pub enum ApprovalStatus {
     None,
 }
 
-#[derive(Copy, Clone, PartialEq, AnchorSerialize, AnchorDeserialize, Default, Debug, InitSpace)]
+#[derive(Clone, PartialEq, AnchorSerialize, AnchorDeserialize, Default, Debug, InitSpace)]
 pub struct Approval {
-    processed: bool, // Indicates that the approval was completed
-    pub approval_status: ApprovalStatus,
-    reason: DeclinedReason,
+    pub processed: bool,       // Indicates that the approval was completed
+    pub approval_status: bool, //ApprovalStatus,
+    #[max_len(20)]
+    pub reason: String, //DeclinedReason,
 }
 
 #[account]
 #[derive(Default, Debug, InitSpace)]
 pub struct NursingApplication {
-    pub nurse_applicant: Pubkey, // publickey of the applicant
+    pub nurse_applicant: Pubkey,         // publickey of the applicant
+    pub educational_institution: Pubkey, // publickey of the educational_institution
+    pub nursing_regulatory_licensing_body: Pubkey, // publickey of the nursing_regulatory_licensing_body
+    pub healthcare_staffing_company: Pubkey,       // publickey of the healthcare_staffing_company
+    pub commission: Pubkey,                        // publickey of the commission
     pub healthcare_staffing_company_approval: Approval, // healthcare_staffing_company approval
     pub educational_institution_approval: Approval, // educational_institution approval
     pub nursing_regulatory_licensing_body_approval: Approval, // nursing_regulatory_licensing_body approval

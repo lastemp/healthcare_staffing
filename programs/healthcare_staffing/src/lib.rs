@@ -40,9 +40,9 @@ pub mod healthcare_staffing {
 
     pub fn submit_application(
         ctx: Context<SubmitApplication>,
-        params: SubmitApplicationParams,
+        //params: SubmitApplicationParams,
     ) -> Result<()> {
-        instructions::submit_application(ctx, &params)
+        instructions::submit_application(ctx)
     }
 
     pub fn approve_applicant_healthcare_staffing_company(

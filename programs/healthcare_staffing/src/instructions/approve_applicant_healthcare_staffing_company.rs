@@ -15,13 +15,13 @@ use {
 #[derive(Accounts)]
 #[instruction(params: ApproveApplicantHealthCareStaffingCompanyParams)]
 pub struct ApproveApplicantHealthCareStaffingCompany<'info> {
-    #[account(mut)]
+    #[account(mut, has_one = owner)]
     pub institution: Account<'info, Institution>,
     // mut makes it changeble (mutable)
     //#[account(mut)]
     /// CHECK: application account for approval by commission
     #[account(
-        mut, constraint = application.commission_approval.approval_status == ApprovalStatus::Approved
+        mut, constraint = application.commission_approval.approval_status
     )]
     pub application: Account<'info, NursingApplication>,
     // mut makes it changeble (mutable)
@@ -51,10 +51,22 @@ pub fn approve_applicant_healthcare_staffing_company(
     //}
 
     let application = &mut ctx.accounts.application;
+    let institution_type = ctx.accounts.institution.institution_type;
 
-    if application.nurse_applicant == *ctx.accounts.owner.key {
+    /* EducationalInstitution = 1,
+    NursingRegulatoryLicensingBody = 2,
+    Commission = 3,
+    HealthcareStaffingCompany = 4, */
+    if institution_type != 4 {
+        panic!()
+    }
+
+    // * - means dereferencing
+    application.healthcare_staffing_company = *ctx.accounts.owner.key;
+
+    if application.nurse_applicant != *ctx.accounts.owner.key {
         application.healthcare_staffing_company_approval =
-            params.healthcare_staffing_company_approval;
+            params.healthcare_staffing_company_approval.to_owned();
     }
 
     Ok(())

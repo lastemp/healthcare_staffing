@@ -15,9 +15,10 @@ pub enum InstitutionType {
 pub struct Institution {
     pub owner: Pubkey, // publickey of the institution
     //pub institution_type: InstitutionType, // institution type
+    pub institution_type: u8, //institution type
     #[max_len(30)]
     pub institution_name: String, // institution name
     #[max_len(30)]
     pub country: String, // home country of institution
-    pub active: bool, // status of institution
+    pub active: bool,         // status of institution
 }

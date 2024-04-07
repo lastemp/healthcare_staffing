@@ -32,7 +32,7 @@ pub struct AddInstitution<'info> {
 
 #[derive(AnchorSerialize, AnchorDeserialize)]
 pub struct AddInstitutionParams {
-    //institution_type: InstitutionType, // institution type
+    institution_type: u8,     //institution type
     institution_name: String, // institution name
     country: String,          // home country of institution
                               //active: bool,                      // status of institution
@@ -48,7 +48,7 @@ pub fn add_institution(ctx: Context<AddInstitution>, params: &AddInstitutionPara
     let institution = &mut ctx.accounts.institution;
     // * - means dereferencing
     institution.owner = *ctx.accounts.owner.key;
-    //institution.institution_type = params.institution_type;
+    institution.institution_type = params.institution_type;
     institution.institution_name = params.institution_name.to_string();
     institution.country = params.country.to_string();
     institution.active = true;

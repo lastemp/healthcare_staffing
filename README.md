@@ -1,6 +1,7 @@
 # healthcare_staffing
 
-This is a healthcare staffing program developed as a Rust Smart Contract(running on Solana Blockchain).
+This is a healthcare staffing Rust Smart Contract(Solana Blockchain).
+It aims to provide foreign students and healthcare professionals with a comprehensive assessment of their academic records to facilitate their successful recruitment, training, and staffing in the US and other countries.
 
 Below are some basic features contained in the program:
 

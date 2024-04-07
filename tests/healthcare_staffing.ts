@@ -204,23 +204,25 @@ describe("healthcare_staffing", () => {
   });
 
   it("Is add institution - EducationalInstitution", async () => {
-    enum InstitutionType {
+    /* enum InstitutionType {
       EducationalInstitution,
       NursingRegulatoryLicensingBody,
       Commission,
       HealthcareStaffingCompany,
       None,
-    }
+    } */
+
+    /* EducationalInstitution = 1,
+    NursingRegulatoryLicensingBody = 2,
+    Commission = 3,
+    HealthcareStaffingCompany = 4, */
 
     let initParams = {
-      //institutionType: InstitutionType.EducationalInstitution,
+      //EducationalInstitution
+      institutionType: 1,
       institutionName: "moi university",
       country: "KE",
     };
-
-    /*     console.log(
-      "initParams: " + initParams.institutionType
-    ); */
 
     const tx = await program.methods
       .addInstitution(initParams)
@@ -234,27 +236,21 @@ describe("healthcare_staffing", () => {
     console.log("Your transaction signature", tx);
 
     let result = await program.account.institution.fetch(institution_1);
-    console.log("institution_1: ", result);
+    console.log("institution: ", result);
   });
 
   it("Is add institution - NursingRegulatoryLicensingBody", async () => {
-    enum InstitutionType {
-      EducationalInstitution,
-      NursingRegulatoryLicensingBody,
-      Commission,
-      HealthcareStaffingCompany,
-      None,
-    }
+    /* EducationalInstitution = 1,
+    NursingRegulatoryLicensingBody = 2,
+    Commission = 3,
+    HealthcareStaffingCompany = 4, */
 
     let initParams = {
-      //institutionType: InstitutionType.EducationalInstitution,
+      //NursingRegulatoryLicensingBody
+      institutionType: 2,
       institutionName: "nursing council",
       country: "KE",
     };
-
-    /*     console.log(
-      "initParams: " + initParams.institutionType
-    ); */
 
     const tx = await program.methods
       .addInstitution(initParams)
@@ -268,27 +264,21 @@ describe("healthcare_staffing", () => {
     console.log("Your transaction signature", tx);
 
     let result = await program.account.institution.fetch(institution_2);
-    console.log("institution_2: ", result);
+    console.log("institution: ", result);
   });
 
   it("Is add institution - Commission", async () => {
-    enum InstitutionType {
-      EducationalInstitution,
-      NursingRegulatoryLicensingBody,
-      Commission,
-      HealthcareStaffingCompany,
-      None,
-    }
+    /* EducationalInstitution = 1,
+    NursingRegulatoryLicensingBody = 2,
+    Commission = 3,
+    HealthcareStaffingCompany = 4, */
 
     let initParams = {
-      //institutionType: InstitutionType.EducationalInstitution,
+      //Commission
+      institutionType: 3,
       institutionName: "cgfns",
       country: "USA",
     };
-
-    /*     console.log(
-      "initParams: " + initParams.institutionType
-    ); */
 
     const tx = await program.methods
       .addInstitution(initParams)
@@ -302,20 +292,18 @@ describe("healthcare_staffing", () => {
     console.log("Your transaction signature", tx);
 
     let result = await program.account.institution.fetch(institution_3);
-    console.log("institution_3: ", result);
+    console.log("institution: ", result);
   });
 
   it("Is add institution - HealthcareStaffingCompany", async () => {
-    enum InstitutionType {
-      EducationalInstitution,
-      NursingRegulatoryLicensingBody,
-      Commission,
-      HealthcareStaffingCompany,
-      None,
-    }
+    /* EducationalInstitution = 1,
+    NursingRegulatoryLicensingBody = 2,
+    Commission = 3,
+    HealthcareStaffingCompany = 4, */
 
     let initParams = {
-      //institutionType: InstitutionType.EducationalInstitution,
+      //HealthcareStaffingCompany
+      institutionType: 4,
       institutionName: "medpro",
       country: "USA",
     };
@@ -336,6 +324,131 @@ describe("healthcare_staffing", () => {
     console.log("Your transaction signature", tx);
 
     let result = await program.account.institution.fetch(institution_4);
-    console.log("institution_4: ", result);
+    console.log("institution: ", result);
+  });
+
+  it("Is submit application!", async () => {
+    const tx = await program.methods
+      .submitApplication()
+      .accounts({
+        owner: applicant_owner.publicKey,
+        applicant: applicant,
+        application: application,
+        systemProgram: anchor.web3.SystemProgram.programId,
+      })
+      .signers([applicant_owner])
+      .rpc();
+    console.log("Your transaction signature", tx);
+
+    let result = await program.account.nursingApplication.fetch(application);
+    console.log("application: ", result);
+  });
+
+  it("Is approve applicant - EducationalInstitution", async () => {
+    let approval = {
+      processed: true, // Indicates that the approval process was completed
+      approvalStatus: true,
+      reason: "",
+    };
+
+    let initParams = {
+      educationalInstitutionApproval: approval,
+    };
+
+    const tx = await program.methods
+      .approveApplicantEducationalInstitution(initParams)
+      .accounts({
+        owner: institution_owner_1.publicKey,
+        institution: institution_1,
+        application: application,
+        systemProgram: anchor.web3.SystemProgram.programId,
+      })
+      .signers([institution_owner_1])
+      .rpc();
+    console.log("Your transaction signature", tx);
+
+    let result = await program.account.nursingApplication.fetch(application);
+    console.log("application: ", result);
+  });
+
+  it("Is approve applicant - NursingRegulatoryLicensingBody", async () => {
+    let approval = {
+      processed: true, // Indicates that the approval process was completed
+      approvalStatus: true,
+      reason: "",
+    };
+
+    let initParams = {
+      nursingRegulatoryLicensingBodyApproval: approval,
+    };
+
+    const tx = await program.methods
+      .approveApplicantNursingRegulatoryLicensingBody(initParams)
+      .accounts({
+        owner: institution_owner_2.publicKey,
+        institution: institution_2,
+        application: application,
+        systemProgram: anchor.web3.SystemProgram.programId,
+      })
+      .signers([institution_owner_2])
+      .rpc();
+    console.log("Your transaction signature", tx);
+
+    let result = await program.account.nursingApplication.fetch(application);
+    console.log("application: ", result);
+  });
+
+  it("Is approve applicant - Commission", async () => {
+    let approval = {
+      processed: true, // Indicates that the approval process was completed
+      approvalStatus: true,
+      reason: "",
+    };
+
+    let initParams = {
+      commissionApproval: approval,
+    };
+
+    const tx = await program.methods
+      .approveApplicantCommission(initParams)
+      .accounts({
+        owner: institution_owner_3.publicKey,
+        institution: institution_3,
+        application: application,
+        systemProgram: anchor.web3.SystemProgram.programId,
+      })
+      .signers([institution_owner_3])
+      .rpc();
+    console.log("Your transaction signature", tx);
+
+    let result = await program.account.nursingApplication.fetch(application);
+    console.log("application: ", result);
+  });
+
+  it("Is approve applicant - HealthcareStaffingCompany", async () => {
+    let approval = {
+      processed: true, // Indicates that the approval process was completed
+      approvalStatus: true,
+      reason: "",
+    };
+
+    let initParams = {
+      healthcareStaffingCompanyApproval: approval,
+    };
+
+    const tx = await program.methods
+      .approveApplicantHealthcareStaffingCompany(initParams)
+      .accounts({
+        owner: institution_owner_4.publicKey,
+        institution: institution_4,
+        application: application,
+        systemProgram: anchor.web3.SystemProgram.programId,
+      })
+      .signers([institution_owner_4])
+      .rpc();
+    console.log("Your transaction signature", tx);
+
+    let result = await program.account.nursingApplication.fetch(application);
+    console.log("application: ", result);
   });
 });

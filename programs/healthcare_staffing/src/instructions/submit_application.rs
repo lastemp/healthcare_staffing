@@ -2,6 +2,7 @@
 
 use {
     crate::{
+        state::applicant::NurseApplicant,
         //error::PerpetualsError,
         //math,
         state::application::{Approval, NursingApplication},
@@ -12,13 +13,19 @@ use {
 };
 
 #[derive(Accounts)]
-#[instruction(params: SubmitApplicationParams)]
+//#[instruction(params: SubmitApplicationParams)]
 pub struct SubmitApplication<'info> {
     // mut makes it changeble (mutable)
     //#[account(mut)]
-    /// CHECK: application account for active status
+    /// CHECK: applicant account for ownership
     #[account(
-        mut, constraint = application.active == true
+        mut, has_one = owner
+    )]
+    pub applicant: Account<'info, NurseApplicant>,
+
+    /// CHECK: application account for ownership
+    #[account(
+        mut, constraint = application.active
     )]
     pub application: Account<'info, NursingApplication>,
     // mut makes it changeble (mutable)
@@ -27,7 +34,7 @@ pub struct SubmitApplication<'info> {
     pub system_program: Program<'info, System>,
 }
 
-#[derive(AnchorSerialize, AnchorDeserialize)]
+/* #[derive(AnchorSerialize, AnchorDeserialize)]
 pub struct SubmitApplicationParams {
     nurse_applicant: Pubkey,                        // publickey of the applicant
     healthcare_staffing_company_approval: Approval, // healthcare_staffing_company approval
@@ -35,11 +42,11 @@ pub struct SubmitApplicationParams {
     nursing_regulatory_licensing_body_approval: Approval, // nursing_regulatory_licensing_body approval
     commission_approval: Approval,                        // commission approval
                                                           //active: bool,                                         // status of application
-}
+} */
 
 pub fn submit_application(
     ctx: Context<SubmitApplication>,
-    params: &SubmitApplicationParams,
+    //params: &SubmitApplicationParams,
 ) -> Result<()> {
     // validate inputs
     msg!("Validate inputs");
