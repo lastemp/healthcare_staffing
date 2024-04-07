@@ -1,11 +1,7 @@
 //! AddApplicant instruction handler
 
 use {
-    crate::{
-        //error::PerpetualsError,
-        //math,
-        state::applicant::NurseApplicant,
-    },
+    crate::{error::HealthcareStaffingError, state::applicant::NurseApplicant},
     anchor_lang::prelude::*,
     //anchor_spl::token::{Token, TokenAccount},
     //solana_program::program_error::ProgramError,
@@ -43,11 +39,50 @@ pub struct AddApplicantParams {
     license: String,     // license of applicant i.e url of document
 }
 
+// full names length
+const FULL_NAMES_LENGTH: usize = 50;
+// date of birth length
+const DATE_OF_BIRTH_LENGTH: usize = 10;
+// hospital length
+const HOSPITAL_LENGTH: usize = 30;
+// country length
+const COUNTRY_LENGTH: usize = 3;
+// transcript length
+const TRANSCRIPT_LENGTH: usize = 100;
+// certificate length
+const CERTIFICATE_LENGTH: usize = 100;
+// license length
+const LICENSE_LENGTH: usize = 100;
+
 pub fn add_applicant(ctx: Context<AddApplicant>, params: &AddApplicantParams) -> Result<()> {
     // validate inputs
     msg!("Validate inputs");
+    if params.national_id_no == 0 {
+        return Err(HealthcareStaffingError::InvalidNationalIdNo.into());
+    }
+    if params.full_names.as_bytes().len() > FULL_NAMES_LENGTH {
+        return Err(HealthcareStaffingError::ExceededFullNamesMaxLength.into());
+    }
+    if params.dob.as_bytes().len() != DATE_OF_BIRTH_LENGTH {
+        return Err(HealthcareStaffingError::ExceededDateOfBirthMaxLength.into());
+    }
     if params.license_no == 0 {
-        //return Err(ProgramError::InvalidArgument.into());
+        return Err(HealthcareStaffingError::InvalidLicenseNo.into());
+    }
+    if params.hospital.as_bytes().len() > HOSPITAL_LENGTH {
+        return Err(HealthcareStaffingError::ExceededHospitalMaxLength.into());
+    }
+    if params.country.as_bytes().len() > COUNTRY_LENGTH {
+        return Err(HealthcareStaffingError::ExceededCountryMaxLength.into());
+    }
+    if params.transcript.as_bytes().len() > TRANSCRIPT_LENGTH {
+        return Err(HealthcareStaffingError::ExceededTranscriptMaxLength.into());
+    }
+    if params.certificate.as_bytes().len() > CERTIFICATE_LENGTH {
+        return Err(HealthcareStaffingError::ExceededCertificateMaxLength.into());
+    }
+    if params.license.as_bytes().len() > LICENSE_LENGTH {
+        return Err(HealthcareStaffingError::ExceededLicenseMaxLength.into());
     }
 
     let applicant = &mut ctx.accounts.applicant;

@@ -1,19 +1,10 @@
-//! Perpetuals program entrypoint
+//! healthcare_staffing program entrypoint
 
-//pub mod error;
+pub mod error;
 pub mod instructions;
-//pub mod math;
 pub mod state;
 
-use {
-    anchor_lang::prelude::*,
-    instructions::*,
-    /*
-    state::perpetuals::{
-        AmountAndFee, NewPositionPricesAndFee, PriceAndFee, ProfitAndLoss, SwapAmountAndFees,
-    },
-    */
-};
+use {anchor_lang::prelude::*, instructions::*};
 
 declare_id!("HoYSBxAs2puTobgpTFTGf6ieVDBf2oXYCN4tUn5KNEHs");
 

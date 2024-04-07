@@ -18,7 +18,7 @@ pub struct Institution {
     pub institution_type: u8, //institution type
     #[max_len(30)]
     pub institution_name: String, // institution name
-    #[max_len(30)]
+    #[max_len(3)]
     pub country: String, // home country of institution
     pub active: bool,         // status of institution
 }

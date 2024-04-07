@@ -2,14 +2,11 @@
 
 use {
     crate::{
-        //error::PerpetualsError,
-        //math,
+        error::HealthcareStaffingError,
         state::application::{Approval, ApprovalStatus, NursingApplication},
         state::institution::Institution,
     },
     anchor_lang::prelude::*,
-    //anchor_spl::token::{Token, TokenAccount},
-    //solana_program::program_error::ProgramError,
 };
 
 #[derive(Accounts)]
@@ -22,7 +19,7 @@ pub struct ApproveApplicantCommission<'info> {
     //mut, constraint = application.nursing_regulatory_licensing_body_approval.approval_status == ApprovalStatus::Approved
     /// CHECK: application account for approval by nursing_regulatory_licensing_body
     #[account(
-        mut, constraint = application.nursing_regulatory_licensing_body_approval.approval_status
+        mut, constraint = application.nursing_regulatory_licensing_body_approval.approval_status @ HealthcareStaffingError::InvalidApprovalStatus
     )]
     pub application: Account<'info, NursingApplication>,
     // mut makes it changeble (mutable)
@@ -41,15 +38,23 @@ pub struct ApproveApplicantCommissionParams {
                                    //active: bool,                                         // status of application
 }
 
+// Declined reason length
+const DECLINED_REASON_LENGTH: usize = 20;
+
 pub fn approve_applicant_commission(
     ctx: Context<ApproveApplicantCommission>,
     params: &ApproveApplicantCommissionParams,
 ) -> Result<()> {
     // validate inputs
     msg!("Validate inputs");
-    //if params.license_no == 0 {
-    //return Err(ProgramError::InvalidArgument.into());
-    //}
+    if !params.commission_approval.approval_status
+        && params.commission_approval.reason.as_bytes().len() == 0
+    {
+        return Err(HealthcareStaffingError::InvalidDeclinedReason.into());
+    }
+    if params.commission_approval.reason.as_bytes().len() > DECLINED_REASON_LENGTH {
+        return Err(HealthcareStaffingError::ExceededDeclinedReasonMaxLength.into());
+    }
 
     let application = &mut ctx.accounts.application;
     let institution_type = ctx.accounts.institution.institution_type;

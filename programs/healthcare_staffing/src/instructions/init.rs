@@ -39,12 +39,6 @@ pub struct InitParams {
 }
 
 pub fn init(ctx: Context<Init>, params: &InitParams) -> Result<()> {
-    // validate inputs
-    msg!("Validate inputs");
-    //if params.license_no == 0 {
-    //return Err(ProgramError::InvalidArgument.into());
-    //}
-
     let application = &mut ctx.accounts.application;
     // * - means dereferencing
     /* institution.owner = *ctx.accounts.owner.key;

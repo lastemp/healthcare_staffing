@@ -2,13 +2,10 @@
 
 use {
     crate::{
-        //error::PerpetualsError,
-        //math,
+        error::HealthcareStaffingError,
         state::institution::{Institution, InstitutionType},
     },
     anchor_lang::prelude::*,
-    //anchor_spl::token::{Token, TokenAccount},
-    //solana_program::program_error::ProgramError,
 };
 
 #[derive(Accounts)]
@@ -38,12 +35,23 @@ pub struct AddInstitutionParams {
                               //active: bool,                      // status of institution
 }
 
+// institution name length
+const INSTITUTION_NAME_LENGTH: usize = 30;
+// country length
+const COUNTRY_LENGTH: usize = 3;
+
 pub fn add_institution(ctx: Context<AddInstitution>, params: &AddInstitutionParams) -> Result<()> {
     // validate inputs
     msg!("Validate inputs");
-    //if params.license_no == 0 {
-    //return Err(ProgramError::InvalidArgument.into());
-    //}
+    if params.institution_type == 0 {
+        return Err(HealthcareStaffingError::InvalidInstitutionType.into());
+    }
+    if params.institution_name.as_bytes().len() > INSTITUTION_NAME_LENGTH {
+        return Err(HealthcareStaffingError::ExceededInstitutionNameMaxLength.into());
+    }
+    if params.country.as_bytes().len() > COUNTRY_LENGTH {
+        return Err(HealthcareStaffingError::ExceededCountryMaxLength.into());
+    }
 
     let institution = &mut ctx.accounts.institution;
     // * - means dereferencing

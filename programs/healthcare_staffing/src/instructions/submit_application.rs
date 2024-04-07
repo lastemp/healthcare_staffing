@@ -48,12 +48,6 @@ pub fn submit_application(
     ctx: Context<SubmitApplication>,
     //params: &SubmitApplicationParams,
 ) -> Result<()> {
-    // validate inputs
-    msg!("Validate inputs");
-    //if params.license_no == 0 {
-    //return Err(ProgramError::InvalidArgument.into());
-    //}
-
     let application = &mut ctx.accounts.application;
     // * - means dereferencing
     application.nurse_applicant = *ctx.accounts.owner.key;

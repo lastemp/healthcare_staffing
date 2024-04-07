@@ -12,7 +12,7 @@ pub struct NurseApplicant {
     pub license_no: u32,     // license no
     #[max_len(30)]
     pub hospital: String, // hospital where applicant works
-    #[max_len(30)]
+    #[max_len(3)]
     pub country: String, // home country of applicant
     #[max_len(100)]
     pub transcript: String, // transcript of applicant i.e url of document
