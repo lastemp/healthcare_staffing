@@ -47,6 +47,7 @@ const DATE_OF_BIRTH_LENGTH: usize = 10;
 const HOSPITAL_LENGTH: usize = 30;
 // country length
 const COUNTRY_LENGTH: usize = 3;
+const COUNTRY_LENGTH_2: usize = 2;
 // transcript length
 const TRANSCRIPT_LENGTH: usize = 100;
 // certificate length
@@ -62,27 +63,49 @@ pub fn add_applicant(ctx: Context<AddApplicant>, params: &AddApplicantParams) ->
     }
     if params.full_names.as_bytes().len() > FULL_NAMES_LENGTH {
         return Err(HealthcareStaffingError::ExceededFullNamesMaxLength.into());
+    } else if params.full_names.as_bytes().len() == 0 {
+        return Err(HealthcareStaffingError::InvalidLength.into());
     }
+
     if params.dob.as_bytes().len() != DATE_OF_BIRTH_LENGTH {
         return Err(HealthcareStaffingError::ExceededDateOfBirthMaxLength.into());
+    } else if params.dob.as_bytes().len() == 0 {
+        return Err(HealthcareStaffingError::InvalidLength.into());
     }
+
     if params.license_no == 0 {
         return Err(HealthcareStaffingError::InvalidLicenseNo.into());
     }
     if params.hospital.as_bytes().len() > HOSPITAL_LENGTH {
         return Err(HealthcareStaffingError::ExceededHospitalMaxLength.into());
+    } else if params.hospital.as_bytes().len() == 0 {
+        return Err(HealthcareStaffingError::InvalidLength.into());
     }
-    if params.country.as_bytes().len() > COUNTRY_LENGTH {
-        return Err(HealthcareStaffingError::ExceededCountryMaxLength.into());
+
+    if params.country.as_bytes().len() != COUNTRY_LENGTH
+        && params.country.as_bytes().len() != COUNTRY_LENGTH_2
+    {
+        return Err(HealthcareStaffingError::InvalidCountryLength.into());
+    } else if params.country.as_bytes().len() == 0 {
+        return Err(HealthcareStaffingError::InvalidLength.into());
     }
+
     if params.transcript.as_bytes().len() > TRANSCRIPT_LENGTH {
         return Err(HealthcareStaffingError::ExceededTranscriptMaxLength.into());
+    } else if params.transcript.as_bytes().len() == 0 {
+        return Err(HealthcareStaffingError::InvalidLength.into());
     }
+
     if params.certificate.as_bytes().len() > CERTIFICATE_LENGTH {
         return Err(HealthcareStaffingError::ExceededCertificateMaxLength.into());
+    } else if params.certificate.as_bytes().len() == 0 {
+        return Err(HealthcareStaffingError::InvalidLength.into());
     }
+
     if params.license.as_bytes().len() > LICENSE_LENGTH {
         return Err(HealthcareStaffingError::ExceededLicenseMaxLength.into());
+    } else if params.license.as_bytes().len() == 0 {
+        return Err(HealthcareStaffingError::InvalidLength.into());
     }
 
     let applicant = &mut ctx.accounts.applicant;

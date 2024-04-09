@@ -75,7 +75,7 @@ pub fn approve_applicant_educational_institution(
     Commission = 3,
     HealthcareStaffingCompany = 4, */
     if institution_type != 1 {
-        panic!()
+        return Err(HealthcareStaffingError::MismatchedInstitutionType.into());
     }
 
     // * - means dereferencing

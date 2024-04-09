@@ -39,18 +39,41 @@ pub struct AddInstitutionParams {
 const INSTITUTION_NAME_LENGTH: usize = 30;
 // country length
 const COUNTRY_LENGTH: usize = 3;
+const COUNTRY_LENGTH_2: usize = 2;
 
 pub fn add_institution(ctx: Context<AddInstitution>, params: &AddInstitutionParams) -> Result<()> {
     // validate inputs
     msg!("Validate inputs");
-    if params.institution_type == 0 {
+
+    /* EducationalInstitution = 1,
+    NursingRegulatoryLicensingBody = 2,
+    Commission = 3,
+    HealthcareStaffingCompany = 4, */
+    let is_valid_institution_type = if params.institution_type == 1
+        || params.institution_type == 2
+        || params.institution_type == 3
+        || params.institution_type == 4
+    {
+        true
+    } else {
+        false
+    };
+
+    if !is_valid_institution_type {
         return Err(HealthcareStaffingError::InvalidInstitutionType.into());
     }
     if params.institution_name.as_bytes().len() > INSTITUTION_NAME_LENGTH {
         return Err(HealthcareStaffingError::ExceededInstitutionNameMaxLength.into());
+    } else if params.institution_name.as_bytes().len() == 0 {
+        return Err(HealthcareStaffingError::InvalidLength.into());
     }
-    if params.country.as_bytes().len() > COUNTRY_LENGTH {
-        return Err(HealthcareStaffingError::ExceededCountryMaxLength.into());
+
+    if params.country.as_bytes().len() != COUNTRY_LENGTH
+        && params.country.as_bytes().len() != COUNTRY_LENGTH_2
+    {
+        return Err(HealthcareStaffingError::InvalidCountryLength.into());
+    } else if params.country.as_bytes().len() == 0 {
+        return Err(HealthcareStaffingError::InvalidLength.into());
     }
 
     let institution = &mut ctx.accounts.institution;

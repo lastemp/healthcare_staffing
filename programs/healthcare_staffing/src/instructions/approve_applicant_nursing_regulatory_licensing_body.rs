@@ -76,7 +76,7 @@ pub fn approve_applicant_nursing_regulatory_licensing_body(
     Commission = 3,
     HealthcareStaffingCompany = 4, */
     if institution_type != 2 {
-        panic!()
+        return Err(HealthcareStaffingError::MismatchedInstitutionType.into());
     }
 
     // * - means dereferencing

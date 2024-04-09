@@ -11,8 +11,8 @@ pub enum HealthcareStaffingError {
     ExceededDateOfBirthMaxLength,
     #[msg("Exceeded hospital max length")]
     ExceededHospitalMaxLength,
-    #[msg("Exceeded country max length")]
-    ExceededCountryMaxLength,
+    #[msg("Country must have length of two or three")]
+    InvalidCountryLength,
     #[msg("Exceeded transcript max length")]
     ExceededTranscriptMaxLength,
     #[msg("Exceeded certificate max length")]
@@ -25,8 +25,10 @@ pub enum HealthcareStaffingError {
     InvalidLicenseNo,
 
     // institution
-    #[msg("Institution type must have a value greater than zero.")]
+    #[msg("Institution type must have either of these values 1,2,3 or 4.")]
     InvalidInstitutionType,
+    #[msg("Institution type does not match the specifed institution.")]
+    MismatchedInstitutionType,
     #[msg("Exceeded institution name max length")]
     ExceededInstitutionNameMaxLength,
 
@@ -41,4 +43,8 @@ pub enum HealthcareStaffingError {
     InvalidDeclinedReason,
     #[msg("Approval must be done in previous step to proceed.")]
     InvalidApprovalStatus,
+
+    // invalid length
+    #[msg("Item must have a length greater than zero.")]
+    InvalidLength,
 }

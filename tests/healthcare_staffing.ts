@@ -4,8 +4,6 @@ import { HealthcareStaffing } from "../target/types/healthcare_staffing";
 
 describe("healthcare_staffing", () => {
   // Configure the client to use the local cluster.
-  //anchor.setProvider(anchor.AnchorProvider.env());
-
   let provider = anchor.AnchorProvider.local("http://127.0.0.1:8899");
   const program = anchor.workspace
     .HealthcareStaffing as Program<HealthcareStaffing>;
@@ -204,14 +202,6 @@ describe("healthcare_staffing", () => {
   });
 
   it("Is add institution - EducationalInstitution", async () => {
-    /* enum InstitutionType {
-      EducationalInstitution,
-      NursingRegulatoryLicensingBody,
-      Commission,
-      HealthcareStaffingCompany,
-      None,
-    } */
-
     /* EducationalInstitution = 1,
     NursingRegulatoryLicensingBody = 2,
     Commission = 3,
@@ -307,10 +297,6 @@ describe("healthcare_staffing", () => {
       institutionName: "medpro",
       country: "USA",
     };
-
-    /*     console.log(
-      "initParams: " + initParams.institutionType
-    ); */
 
     const tx = await program.methods
       .addInstitution(initParams)
