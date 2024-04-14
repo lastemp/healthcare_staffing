@@ -7,12 +7,12 @@ describe("healthcare_staffing", () => {
   let provider = anchor.AnchorProvider.local("http://127.0.0.1:8899");
   const program = anchor.workspace
     .HealthcareStaffing as Program<HealthcareStaffing>;
-  const admin_owner = anchor.web3.Keypair.generate();
-  const applicant_owner = anchor.web3.Keypair.generate();
-  const institution_owner_1 = anchor.web3.Keypair.generate();
-  const institution_owner_2 = anchor.web3.Keypair.generate();
-  const institution_owner_3 = anchor.web3.Keypair.generate();
-  const institution_owner_4 = anchor.web3.Keypair.generate();
+  const adminOwner = anchor.web3.Keypair.generate();
+  const applicantOwner = anchor.web3.Keypair.generate();
+  const institutionOwner1 = anchor.web3.Keypair.generate();
+  const institutionOwner2 = anchor.web3.Keypair.generate();
+  const institutionOwner3 = anchor.web3.Keypair.generate();
+  const institutionOwner4 = anchor.web3.Keypair.generate();
 
   let [application] = anchor.web3.PublicKey.findProgramAddressSync(
     [anchor.utils.bytes.utf8.encode("application")],
@@ -22,47 +22,47 @@ describe("healthcare_staffing", () => {
   let [applicant] = anchor.web3.PublicKey.findProgramAddressSync(
     [
       anchor.utils.bytes.utf8.encode("applicant"),
-      applicant_owner.publicKey.toBuffer(),
+      applicantOwner.publicKey.toBuffer(),
     ],
     program.programId
   );
 
-  let [institution_1] = anchor.web3.PublicKey.findProgramAddressSync(
+  let [institution1] = anchor.web3.PublicKey.findProgramAddressSync(
     [
       anchor.utils.bytes.utf8.encode("institution"),
-      institution_owner_1.publicKey.toBuffer(),
+      institutionOwner1.publicKey.toBuffer(),
     ],
     program.programId
   );
 
-  let [institution_2] = anchor.web3.PublicKey.findProgramAddressSync(
+  let [institution2] = anchor.web3.PublicKey.findProgramAddressSync(
     [
       anchor.utils.bytes.utf8.encode("institution"),
-      institution_owner_2.publicKey.toBuffer(),
+      institutionOwner2.publicKey.toBuffer(),
     ],
     program.programId
   );
 
-  let [institution_3] = anchor.web3.PublicKey.findProgramAddressSync(
+  let [institution3] = anchor.web3.PublicKey.findProgramAddressSync(
     [
       anchor.utils.bytes.utf8.encode("institution"),
-      institution_owner_3.publicKey.toBuffer(),
+      institutionOwner3.publicKey.toBuffer(),
     ],
     program.programId
   );
 
-  let [institution_4] = anchor.web3.PublicKey.findProgramAddressSync(
+  let [institution4] = anchor.web3.PublicKey.findProgramAddressSync(
     [
       anchor.utils.bytes.utf8.encode("institution"),
-      institution_owner_4.publicKey.toBuffer(),
+      institutionOwner4.publicKey.toBuffer(),
     ],
     program.programId
   );
 
-  // admin_owner
+  // admin owner
   before(async () => {
     let res = await provider.connection.requestAirdrop(
-      admin_owner.publicKey,
+      adminOwner.publicKey,
       10 * anchor.web3.LAMPORTS_PER_SOL
     );
 
@@ -75,10 +75,10 @@ describe("healthcare_staffing", () => {
     });
   });
 
-  // applicant_owner
+  // applicant owner
   before(async () => {
     let res = await provider.connection.requestAirdrop(
-      applicant_owner.publicKey,
+      applicantOwner.publicKey,
       10 * anchor.web3.LAMPORTS_PER_SOL
     );
 
@@ -91,10 +91,10 @@ describe("healthcare_staffing", () => {
     });
   });
 
-  // institution_owner 1
+  // institution owner 1
   before(async () => {
     let res = await provider.connection.requestAirdrop(
-      institution_owner_1.publicKey,
+      institutionOwner1.publicKey,
       10 * anchor.web3.LAMPORTS_PER_SOL
     );
 
@@ -107,10 +107,10 @@ describe("healthcare_staffing", () => {
     });
   });
 
-  // institution_owner 2
+  // institution owner 2
   before(async () => {
     let res = await provider.connection.requestAirdrop(
-      institution_owner_2.publicKey,
+      institutionOwner2.publicKey,
       10 * anchor.web3.LAMPORTS_PER_SOL
     );
 
@@ -126,7 +126,7 @@ describe("healthcare_staffing", () => {
   // institution_owner 3
   before(async () => {
     let res = await provider.connection.requestAirdrop(
-      institution_owner_3.publicKey,
+      institutionOwner3.publicKey,
       10 * anchor.web3.LAMPORTS_PER_SOL
     );
 
@@ -142,7 +142,7 @@ describe("healthcare_staffing", () => {
   // institution_owner 4
   before(async () => {
     let res = await provider.connection.requestAirdrop(
-      institution_owner_4.publicKey,
+      institutionOwner4.publicKey,
       10 * anchor.web3.LAMPORTS_PER_SOL
     );
 
@@ -161,11 +161,11 @@ describe("healthcare_staffing", () => {
     const tx = await program.methods
       .init(initParams)
       .accounts({
-        owner: admin_owner.publicKey,
+        owner: adminOwner.publicKey,
         application: application,
         systemProgram: anchor.web3.SystemProgram.programId,
       })
-      .signers([admin_owner])
+      .signers([adminOwner])
       .rpc();
     console.log("Your transaction signature", tx);
 
@@ -189,11 +189,11 @@ describe("healthcare_staffing", () => {
     const tx = await program.methods
       .addApplicant(initParams)
       .accounts({
-        owner: applicant_owner.publicKey,
+        owner: applicantOwner.publicKey,
         applicant: applicant,
         systemProgram: anchor.web3.SystemProgram.programId,
       })
-      .signers([applicant_owner])
+      .signers([applicantOwner])
       .rpc();
     console.log("Your transaction signature", tx);
 
@@ -217,15 +217,15 @@ describe("healthcare_staffing", () => {
     const tx = await program.methods
       .addInstitution(initParams)
       .accounts({
-        owner: institution_owner_1.publicKey,
-        institution: institution_1,
+        owner: institutionOwner1.publicKey,
+        institution: institution1,
         systemProgram: anchor.web3.SystemProgram.programId,
       })
-      .signers([institution_owner_1])
+      .signers([institutionOwner1])
       .rpc();
     console.log("Your transaction signature", tx);
 
-    let result = await program.account.institution.fetch(institution_1);
+    let result = await program.account.institution.fetch(institution1);
     console.log("institution: ", result);
   });
 
@@ -245,15 +245,15 @@ describe("healthcare_staffing", () => {
     const tx = await program.methods
       .addInstitution(initParams)
       .accounts({
-        owner: institution_owner_2.publicKey,
-        institution: institution_2,
+        owner: institutionOwner2.publicKey,
+        institution: institution2,
         systemProgram: anchor.web3.SystemProgram.programId,
       })
-      .signers([institution_owner_2])
+      .signers([institutionOwner2])
       .rpc();
     console.log("Your transaction signature", tx);
 
-    let result = await program.account.institution.fetch(institution_2);
+    let result = await program.account.institution.fetch(institution2);
     console.log("institution: ", result);
   });
 
@@ -273,15 +273,15 @@ describe("healthcare_staffing", () => {
     const tx = await program.methods
       .addInstitution(initParams)
       .accounts({
-        owner: institution_owner_3.publicKey,
-        institution: institution_3,
+        owner: institutionOwner3.publicKey,
+        institution: institution3,
         systemProgram: anchor.web3.SystemProgram.programId,
       })
-      .signers([institution_owner_3])
+      .signers([institutionOwner3])
       .rpc();
     console.log("Your transaction signature", tx);
 
-    let result = await program.account.institution.fetch(institution_3);
+    let result = await program.account.institution.fetch(institution3);
     console.log("institution: ", result);
   });
 
@@ -301,15 +301,15 @@ describe("healthcare_staffing", () => {
     const tx = await program.methods
       .addInstitution(initParams)
       .accounts({
-        owner: institution_owner_4.publicKey,
-        institution: institution_4,
+        owner: institutionOwner4.publicKey,
+        institution: institution4,
         systemProgram: anchor.web3.SystemProgram.programId,
       })
-      .signers([institution_owner_4])
+      .signers([institutionOwner4])
       .rpc();
     console.log("Your transaction signature", tx);
 
-    let result = await program.account.institution.fetch(institution_4);
+    let result = await program.account.institution.fetch(institution4);
     console.log("institution: ", result);
   });
 
@@ -317,12 +317,12 @@ describe("healthcare_staffing", () => {
     const tx = await program.methods
       .submitApplication()
       .accounts({
-        owner: applicant_owner.publicKey,
+        owner: applicantOwner.publicKey,
         applicant: applicant,
         application: application,
         systemProgram: anchor.web3.SystemProgram.programId,
       })
-      .signers([applicant_owner])
+      .signers([applicantOwner])
       .rpc();
     console.log("Your transaction signature", tx);
 
@@ -344,12 +344,12 @@ describe("healthcare_staffing", () => {
     const tx = await program.methods
       .approveApplicantEducationalInstitution(initParams)
       .accounts({
-        owner: institution_owner_1.publicKey,
-        institution: institution_1,
+        owner: institutionOwner1.publicKey,
+        institution: institution1,
         application: application,
         systemProgram: anchor.web3.SystemProgram.programId,
       })
-      .signers([institution_owner_1])
+      .signers([institutionOwner1])
       .rpc();
     console.log("Your transaction signature", tx);
 
@@ -371,12 +371,12 @@ describe("healthcare_staffing", () => {
     const tx = await program.methods
       .approveApplicantNursingRegulatoryLicensingBody(initParams)
       .accounts({
-        owner: institution_owner_2.publicKey,
-        institution: institution_2,
+        owner: institutionOwner2.publicKey,
+        institution: institution2,
         application: application,
         systemProgram: anchor.web3.SystemProgram.programId,
       })
-      .signers([institution_owner_2])
+      .signers([institutionOwner2])
       .rpc();
     console.log("Your transaction signature", tx);
 
@@ -398,12 +398,12 @@ describe("healthcare_staffing", () => {
     const tx = await program.methods
       .approveApplicantCommission(initParams)
       .accounts({
-        owner: institution_owner_3.publicKey,
-        institution: institution_3,
+        owner: institutionOwner3.publicKey,
+        institution: institution3,
         application: application,
         systemProgram: anchor.web3.SystemProgram.programId,
       })
-      .signers([institution_owner_3])
+      .signers([institutionOwner3])
       .rpc();
     console.log("Your transaction signature", tx);
 
@@ -425,12 +425,12 @@ describe("healthcare_staffing", () => {
     const tx = await program.methods
       .approveApplicantHealthcareStaffingCompany(initParams)
       .accounts({
-        owner: institution_owner_4.publicKey,
-        institution: institution_4,
+        owner: institutionOwner4.publicKey,
+        institution: institution4,
         application: application,
         systemProgram: anchor.web3.SystemProgram.programId,
       })
-      .signers([institution_owner_4])
+      .signers([institutionOwner4])
       .rpc();
     console.log("Your transaction signature", tx);
 
